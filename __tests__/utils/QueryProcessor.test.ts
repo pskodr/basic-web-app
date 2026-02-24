@@ -60,4 +60,21 @@ describe("QueryProcessor", () => {
     test('should return prime numbers', () => {
         expect(QueryProcessor("Which of the following numbers are primes: 18, 53, 22, 84, 30?")).toBe("53");
     })
+
+    test('should compute power', () => {
+        expect(QueryProcessor("What is 47 to the power of 92?")).not.toBe("");
+        expect(QueryProcessor("What is 2 to the power of 10?")).toBe("1024");
+    })
+
+    test('should compute multiple plus', () => {
+        expect(QueryProcessor("What is 34 plus 45 plus 56?")).toBe("135");
+    })
+
+    test('should compute plus and minus', () => {
+        expect(QueryProcessor("What is 12 plus 23 minus 23?")).toBe("12");
+    })
+
+    test('should compute mixed minus multiplied by power', () => {
+        expect(QueryProcessor("What is 12 minus 35 multiplied by 2 to the power of 9?")).toBe("-17908");
+    })
 });

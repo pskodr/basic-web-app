@@ -34,6 +34,43 @@ export default function QueryProcessor(query: string): string {
     return sixthPowers.length > 0 ? sixthPowers.join(", ") : "";
   }
 
+  const mixedMatch = query.match(/what is (\d+) minus (\d+) multiplied by (\d+) to the power of (\d+)/i);
+  if (mixedMatch) {
+    const a = parseInt(mixedMatch[1], 10);
+    const b = parseInt(mixedMatch[2], 10);
+    const c = parseInt(mixedMatch[3], 10);
+    const exp = parseInt(mixedMatch[4], 10);
+    const pow = Math.pow(c, exp);
+    return String(a - b * pow);
+  }
+
+  const powerMatch = query.match(/what is (\d+) to the power of (\d+)/i);
+  if (powerMatch) {
+    const base = BigInt(powerMatch[1]);
+    let exp = BigInt(powerMatch[2]);
+    let result = BigInt(1);
+    while (exp > BigInt(0)) {
+      result *= base;
+      exp -= BigInt(1);
+    }
+    return String(result);
+  }
+
+  const plusMinusMatch = query.match(/what is (.+?)\s*\?\s*$/i);
+  if (plusMinusMatch) {
+    const inner = plusMinusMatch[1].trim();
+    if (/^\d+(\s+(plus|minus)\s+\d+)+$/i.test(inner)) {
+      const parts = inner.split(/(\s+(?:plus|minus)\s+)/i);
+      let acc = parseInt(parts[0], 10);
+      for (let i = 1; i < parts.length; i += 2) {
+        const op = parts[i].trim().toLowerCase();
+        const num = parseInt(parts[i + 1], 10);
+        acc = op === "plus" ? acc + num : acc - num;
+      }
+      return String(acc);
+    }
+  }
+
   const minusMatch = query.match(/what is (\d+) minus (\d+)/i);
   if (minusMatch) {
     return String(parseInt(minusMatch[1], 10) - parseInt(minusMatch[2], 10));
