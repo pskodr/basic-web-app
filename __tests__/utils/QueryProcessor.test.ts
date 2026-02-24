@@ -77,4 +77,12 @@ describe("QueryProcessor", () => {
     test('should compute mixed minus multiplied by power', () => {
         expect(QueryProcessor("What is 12 minus 35 multiplied by 2 to the power of 9?")).toBe("-17908");
     })
+
+    test('should return anagram of word', () => {
+        expect(QueryProcessor("Which of the following is an anagram of listen: google, banana, enlists, silent?")).toBe("silent");
+    })
+
+    test('should return scrabble score', () => {
+        expect(QueryProcessor("What is the scrabble score of cloud?")).toBe("8");
+    })
 });

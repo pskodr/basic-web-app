@@ -98,5 +98,26 @@ export default function QueryProcessor(query: string): string {
     return primes.length > 0 ? primes.join(", ") : "";
   }
 
+  const anagramMatch = query.match(/which of the following is an anagram of (\w+):\s*([\w,\s]+)/i);
+  if (anagramMatch) {
+    const target = anagramMatch[1].toLowerCase();
+    const norm = (s: string) => s.toLowerCase().split("").sort().join("");
+    const targetNorm = norm(target);
+    const options = anagramMatch[2].split(",").map((s) => s.trim());
+    const anagrams = options.filter((w) => w.length === target.length && norm(w) === targetNorm);
+    return anagrams.length > 0 ? anagrams.join(", ") : "";
+  }
+
+  const scrabbleMatch = query.match(/what is the scrabble score of (\w+)/i);
+  if (scrabbleMatch) {
+    const SCORES: Record<string, number> = {
+      a: 1, b: 3, c: 3, d: 2, e: 1, f: 4, g: 2, h: 4, i: 1, j: 8, k: 5, l: 1, m: 3,
+      n: 1, o: 1, p: 3, q: 10, r: 1, s: 1, t: 1, u: 1, v: 4, w: 4, x: 8, y: 4, z: 10,
+    };
+    const word = scrabbleMatch[1].toLowerCase();
+    const total = word.split("").reduce((sum, c) => sum + (SCORES[c] ?? 0), 0);
+    return String(total);
+  }
+
   return "";
 }
