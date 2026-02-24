@@ -39,4 +39,25 @@ describe("QueryProcessor", () => {
         const response: string = QueryProcessor(query);
         expect(response).toBe("25");
     })
+
+    test('should return numbers that are both square and cube', () => {
+        expect(QueryProcessor("Which of the following numbers is both a square and a cube: 1521, 4984, 64, 2197, 4059, 1729, 4411?")).toBe("64");
+        expect(QueryProcessor("Which of the following numbers is both a square and a cube: 934, 241, 512, 4849, 1818, 1, 3600?")).toBe("1");
+    })
+
+    test('should compute subtraction', () => {
+        expect(QueryProcessor("What is 98 minus 78?")).toBe("20");
+    })
+
+    test('should compute multiplication', () => {
+        expect(QueryProcessor("What is 16 multiplied by 56?")).toBe("896");
+    })
+
+    test('should compute addition', () => {
+        expect(QueryProcessor("What is 9 + 10?")).toBe("19");
+    })
+
+    test('should return prime numbers', () => {
+        expect(QueryProcessor("Which of the following numbers are primes: 18, 53, 22, 84, 30?")).toBe("53");
+    })
 });
