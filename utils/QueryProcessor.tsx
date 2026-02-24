@@ -56,6 +56,32 @@ export default function QueryProcessor(query: string): string {
     return String(result);
   }
 
+  const multPlusMinusMatch = query.match(/what is (.+?)\s*\?\s*$/i);
+  if (multPlusMinusMatch) {
+    const inner = multPlusMinusMatch[1].trim();
+    const hasMult = /multiplied by/i.test(inner);
+    const hasPlusMinus = /\s+(plus|minus)\s+/i.test(inner);
+    if (hasMult && hasPlusMinus) {
+      const parts = inner.split(/(\s+(?:plus|minus)\s+)/i);
+      const terms: number[] = [];
+      const ops: string[] = [];
+      for (let i = 0; i < parts.length; i++) {
+        if (/^\s*(plus|minus)\s*$/i.test(parts[i])) {
+          ops.push(parts[i].trim().toLowerCase());
+        } else {
+          const termStr = parts[i].trim();
+          const factors = termStr.split(/\s+multiplied by\s+/i).map((s) => parseInt(s.trim(), 10));
+          terms.push(factors.reduce((a, b) => a * b, 1));
+        }
+      }
+      let acc = terms[0];
+      for (let i = 0; i < ops.length; i++) {
+        acc = ops[i] === "plus" ? acc + terms[i + 1] : acc - terms[i + 1];
+      }
+      return String(acc);
+    }
+  }
+
   const plusMinusMatch = query.match(/what is (.+?)\s*\?\s*$/i);
   if (plusMinusMatch) {
     const inner = plusMinusMatch[1].trim();
@@ -76,7 +102,7 @@ export default function QueryProcessor(query: string): string {
     return String(parseInt(minusMatch[1], 10) - parseInt(minusMatch[2], 10));
   }
 
-  const multipliedMatch = query.match(/what is (\d+) multiplied by (\d+)/i);
+  const multipliedMatch = query.match(/what is (\d+) multiplied by (\d+)(?:\s|\?|$)/i);
   if (multipliedMatch) {
     return String(parseInt(multipliedMatch[1], 10) * parseInt(multipliedMatch[2], 10));
   }

@@ -78,6 +78,10 @@ describe("QueryProcessor", () => {
         expect(QueryProcessor("What is 12 minus 35 multiplied by 2 to the power of 9?")).toBe("-17908");
     })
 
+    test('should compute multiplied by then plus', () => {
+        expect(QueryProcessor("What is 22 multiplied by 54 plus 1?")).toBe("1189");
+    })
+
     test('should return anagram of word', () => {
         expect(QueryProcessor("Which of the following is an anagram of listen: google, banana, enlists, silent?")).toBe("silent");
     })
