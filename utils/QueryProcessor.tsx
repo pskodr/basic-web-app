@@ -15,5 +15,12 @@ export default function QueryProcessor(query: string): string {
     return "pchivatx";
   }
 
+  const largestMatch = query.match(/which of the following numbers is the largest:\s*([\d,\s]+)/i);
+  if (largestMatch) {
+    const numbers = largestMatch[1].split(",").map((s) => parseInt(s.trim(), 10));
+    const max = Math.max(...numbers);
+    return String(max);
+  }
+
   return "";
 }
