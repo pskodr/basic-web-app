@@ -25,10 +25,12 @@ export default function QueryProcessor(query: string): string {
   const squareAndCubeMatch = query.match(/which of the following numbers is both a square and a cube:\s*([\d,\s]+)/i);
   if (squareAndCubeMatch) {
     const numbers = squareAndCubeMatch[1].split(",").map((s) => parseInt(s.trim(), 10));
-    const sixthPowers = numbers.filter((n) => {
-      const r = Math.round(Math.pow(n, 1 / 6));
-      return r * r * r * r * r * r === n;
-    });
+    const sixthPowers = numbers
+      .filter((n) => {
+        const r = Math.round(Math.pow(n, 1 / 6));
+        return r * r * r * r * r * r === n;
+      })
+      .sort((a, b) => a - b);
     return sixthPowers.length > 0 ? sixthPowers.join(", ") : "";
   }
 
