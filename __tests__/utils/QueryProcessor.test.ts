@@ -33,4 +33,10 @@ describe("QueryProcessor", () => {
             "pchivatx"
           ));
     })
+
+    test('should return largest number', () => {
+        const query = "Which of the following numbers is the largest: 13, 3, 25?";
+        const response: string = QueryProcessor(query);
+        expect(response).toBe("25");
+    })
 });
